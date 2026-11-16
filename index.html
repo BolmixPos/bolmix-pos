@@ -88,22 +88,19 @@ $("discount").oninput=renderCart;
 $("saveSale").onclick=async()=>{if(!cart.length){alert("Önce ürün seç.");return}let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);if(discount>subtotal){alert("İndirim ürün toplamından fazla olamaz.");return}let total=subtotal-discount,channel=$("channel").value,platform=["Yemeksepeti","Trendyol","Migros"].includes(channel),courier=$("delivery").value==="courier"?102:0;let payment_method=$("paymentMethod").value;let {data,error}=await sb.from("sales").insert({sale_date:today(),channel,delivery:$("delivery").value,total,commission:platform?total*.15:0,courier_cost:courier,payment_method,discount_amount:discount,list_total:subtotal}).select().single();if(error){alert("Satış kaydedilemedi: "+error.message);return}let items=cart.map(x=>({sale_id:data.id,product_id:x.id,product_name:x.name,quantity:x.qty,unit_price:x.price,unit_cost:x.cost}));let res=await sb.from("sale_items").insert(items);if(res.error){alert("Satış başlığı kaydedildi ancak ürün satırları kaydedilemedi. Yönetici kontrolü gerekli: "+res.error.message);return}cart=[];$("discount").value="0";renderCart();alert("Satış kaydedildi.");loadReport()};
 $("addExpense").onclick=async()=>{let description=$("exName").value.trim(),amount=Number($("exAmount").value);if(!description||amount<=0){alert("Açıklama ve tutar gir.");return}let {error}=await sb.from("expenses").insert({expense_date:today(),description,category:$("exType").value,amount,payment_method:$("exPaymentMethod").value});if(error){alert(error.message);return}$("exName").value="";$("exAmount").value="";loadExpenses();alert("Gider kaydedildi.")};
 async function loadExpenses(){let {data,error}=await sb.from("expenses").select("*").eq("expense_date",today()).is("deleted_at",null).order("id",{ascending:false});if(error){$("expenseList").textContent=error.message;return}expenses=data||[];$("expenseList").innerHTML=expenses.map(x=>'<div class="cartrow"><div class="info"><b>'+x.description+'</b><small>'+x.category+' • '+(x.payment_method||"Eski kayıt")+'</small></div><b>'+money(x.amount)+'</b></div>').join("")||'<p class="muted">Bugün gider yok.</p>'}
-function nextDateISO(dateValue){
- const parts=String(dateValue).split("-").map(Number);
- const dt=new Date(parts[0],parts[1]-1,parts[2]);
- dt.setDate(dt.getDate()+1);
- return [dt.getFullYear(),String(dt.getMonth()+1).padStart(2,"0"),String(dt.getDate()).padStart(2,"0")].join("-");
-}
 async function loadReport(){
  const d=$("reportDate").value||today();
- const next=nextDateISO(d);
- let [sr,er,cr]=await Promise.all([
-  sb.from("sales").select("*,sale_items(*)").gte("sale_date",d).lt("sale_date",next).is("deleted_at",null),
-  sb.from("expenses").select("*").gte("expense_date",d).lt("expense_date",next).is("deleted_at",null),
+ // Use a half-open date range so both DATE and timestamp columns are handled consistently.
+ const nextDate=new Date(d+"T12:00:00");nextDate.setDate(nextDate.getDate()+1);
+ const end=nextDate.toLocaleDateString("en-CA");
+ $("status").textContent="Gün sonu kayıtları yükleniyor…";
+ const [sr,er,cr]=await Promise.all([
+  sb.from("sales").select("*,sale_items(*)").gte("sale_date",d).lt("sale_date",end).is("deleted_at",null),
+  sb.from("expenses").select("*").gte("expense_date",d).lt("expense_date",end).is("deleted_at",null),
   sb.from("cash_closings").select("*").eq("close_date",d).maybeSingle()
  ]);
- if(sr.error||er.error){$("status").textContent="Gün sonu kayıtları yüklenemedi: "+(sr.error||er.error).message;return}
- if(cr.error && !String(cr.error.message||"").includes("does not exist")){$("status").textContent=cr.error.message;return}
+ if(sr.error||er.error){$("status").textContent="Gün sonu veri hatası: "+(sr.error||er.error).message;return}
+ if(cr.error && !String(cr.error.message||"").includes("does not exist")){$("status").textContent="Kasa kapanış kaydı okunamadı: "+cr.error.message;return}
  currentCashClose=cr.data||null;
  let gross=0,discountTotal=0,com=0,cour=0,cogs=0,by={},qty={},payments={},platformGross=0,platformCommission=0,platformNet=0,cashReceipts=0,cashExpenses=0,cardReceipts=0,onlineReceipts=0,otherReceipts=0,courierPackages=0,courierOrderTotal=0,courierOnlineTotal=0; let detail={cash:[],card:[],online:[],other:[]};
  (sr.data||[]).forEach(s=>{
@@ -148,6 +145,7 @@ async function loadReport(){
  let counted=$("countedCash").value===""?null:Number($("countedCash").value);
  $("cashDifference").textContent=counted===null?"—":money(counted-expected);
  $("cashCloseStatus").textContent=currentCashClose?"Bu tarih için kayıtlı kasa kapanışı var. Değiştirip yeniden kaydedebilirsin.":"Kasa kapanışı henüz kaydedilmedi. Nakit dışındaki tahsilatlar fiziksel kasaya eklenmez.";
+ $("status").textContent=`${d}: ${(sr.data||[]).length} satış, ${(er.data||[]).length} gider kaydı yüklendi.`;
 }
 $("countedCash").oninput=()=>{let expected=parseMoney($("expectedCash").textContent);$("cashDifference").textContent=$("countedCash").value===""?"—":money(Number($("countedCash").value)-expected)};
 function parseMoney(s){return Number(String(s||"").replace(/[^\d,-]/g,"").replace(/\./g,"").replace(",", "."))||0}
