@@ -86,26 +86,42 @@ function renderProducts(){$("products").innerHTML="";menu.forEach(p=>{let price=
 $("channel").onchange=()=>{cart=[];renderProducts();renderCart()};
  function renderCart(){$("cart").innerHTML="";if(!cart.length)$("cart").innerHTML='<p class="muted">Ürün seçerek sepete ekle.</p>';cart.forEach((x,i)=>{let r=document.createElement("div");r.className="cartrow";r.innerHTML='<div class="info"><b>'+x.name+'</b><small>'+x.qty+' adet</small></div><input type="number" min="0" step=".01" value="'+x.price+'"><button class="btn soft">−</button><button class="btn soft">×</button>';r.querySelector("input").onchange=e=>{x.price=Math.max(0,Number(e.target.value)||0);renderCart()};let bs=r.querySelectorAll("button");bs[0].onclick=()=>{x.qty=Math.max(1,x.qty-1);renderCart()};bs[1].onclick=()=>{cart.splice(i,1);renderCart()};$("cart").appendChild(r)});let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);$("subtotal").textContent=money(subtotal);$("total").textContent=money(Math.max(0,subtotal-discount))}
 $("discount").oninput=renderCart;
-$("saveSale").onclick=async()=>{if(!cart.length){alert("Önce ürün seç.");return}let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);if(discount>subtotal){alert("İndirim ürün toplamından fazla olamaz.");return}let total=subtotal-discount,channel=$("channel").value,platform=["Yemeksepeti","Trendyol","Migros"].includes(channel),courier=$("delivery").value==="courier"?102:0;let payment_method=$("paymentMethod").value;let {data,error}=await sb.from("sales").insert({sale_date:today(),channel,delivery:$("delivery").value,total,commission:platform?total*.15:0,courier_cost:courier,payment_method,discount_amount:discount,list_total:subtotal}).select().single();if(error){alert("Satış kaydedilemedi: "+error.message);return}let items=cart.map(x=>({sale_id:data.id,product_id:x.id,product_name:x.name,quantity:x.qty,unit_price:x.price,unit_cost:x.cost}));let res=await sb.from("sale_items").insert(items);if(res.error){alert("Satış başlığı kaydedildi ancak ürün satırları kaydedilemedi. Yönetici kontrolü gerekli: "+res.error.message);return}cart=[];$("discount").value="0";renderCart();alert("Satış kaydedildi.");loadReport()};
+$("saveSale").onclick=async()=>{if(!cart.length){alert("Önce ürün seç.");return}let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);if(discount>subtotal){alert("İndirim ürün toplamından fazla olamaz.");return}let total=subtotal-discount,channel=$("channel").value,platform=["Yemeksepeti","Trendyol","Migros"].includes(channel),courier=$("delivery").value==="courier"?102:0;let payment_method=$("paymentMethod").value;let {data,error}=await sb.from("sales").insert({sale_date:today(),channel,delivery:$("delivery").value,total,commission:platform?total*.15:0,courier_cost:courier,payment_method,discount_amount:discount,list_total:subtotal}).select().single();if(error){alert("Satış kaydedilemedi: "+error.message);return}let items=cart.map(x=>({sale_id:data.id,product_id:x.id,product_name:x.name,quantity:x.qty,unit_price:x.price,unit_cost:x.cost}));let res=await sb.from("sale_items").insert(items);if(res.error){alert("Satış başlığı kaydedildi ancak ürün satırları kaydedilemedi. Yönetici kontrolü gerekli: "+res.error.message);return}cart=[];$("discount").value="0";renderCart();alert("Satış kaydedildi.");await loadReport()};
 $("addExpense").onclick=async()=>{let description=$("exName").value.trim(),amount=Number($("exAmount").value);if(!description||amount<=0){alert("Açıklama ve tutar gir.");return}let {error}=await sb.from("expenses").insert({expense_date:today(),description,category:$("exType").value,amount,payment_method:$("exPaymentMethod").value});if(error){alert(error.message);return}$("exName").value="";$("exAmount").value="";loadExpenses();alert("Gider kaydedildi.")};
 async function loadExpenses(){const d=today(),end=addDaysISO(d,1);let {data,error}=await sb.from("expenses").select("*").gte("expense_date",d).lt("expense_date",end).is("deleted_at",null).order("id",{ascending:false});if(error){$("expenseList").textContent=error.message;return}expenses=data||[];$("expenseList").innerHTML=expenses.map(x=>'<div class="cartrow"><div class="info"><b>'+x.description+'</b><small>'+x.category+' • '+(x.payment_method||"Eski kayıt")+'</small></div><b>'+money(x.amount)+'</b></div>').join("")||'<p class="muted">Bugün gider yok.</p>'}
 async function loadReport(){
  const d=$("reportDate").value||today();
- // Use a half-open date range so both DATE and timestamp columns are handled consistently.
- const end=addDaysISO(d,1);
- $("status").textContent="Gün sonu kayıtları yükleniyor…";
- // Tarih aralığı sorgusu; eski şemalarda deleted_at alanı bulunmayabilir.
- const salesQuery=()=>sb.from("sales").select("*,sale_items(*)").gte("sale_date",d).lt("sale_date",end).is("deleted_at",null);
- const expensesQuery=()=>sb.from("expenses").select("*").gte("expense_date",d).lt("expense_date",end).is("deleted_at",null);
- let [sr,er,cr]=await Promise.all([salesQuery(),expensesQuery(),sb.from("cash_closings").select("*").eq("close_date",d).maybeSingle()]);
- // deleted_at kolonu yoksa aynı sorguyu bu filtre olmadan tekrarla.
- if(sr.error && /deleted_at|column/i.test(sr.error.message||'')) sr=await sb.from("sales").select("*,sale_items(*)").gte("sale_date",d).lt("sale_date",end);
- if(er.error && /deleted_at|column/i.test(er.error.message||'')) er=await sb.from("expenses").select("*").gte("expense_date",d).lt("expense_date",end);
- // Tarih alanı DATE yerine farklı timestamp/formatta ise kayıtları çekip yerel gün anahtarına göre süz.
- if(!sr.error && !(sr.data||[]).length){const all=await sb.from("sales").select("*,sale_items(*)").order("created_at",{ascending:false}).limit(1000);if(!all.error)sr={data:(all.data||[]).filter(x=>String(x.sale_date||x.created_at||'').slice(0,10)===d && !x.deleted_at),error:null};}
- if(!er.error && !(er.data||[]).length){const all=await sb.from("expenses").select("*").order("id",{ascending:false}).limit(1000);if(!all.error)er={data:(all.data||[]).filter(x=>String(x.expense_date||'').slice(0,10)===d && !x.deleted_at),error:null};}
- if(sr.error||er.error){$("status").textContent="Gün sonu veri hatası: "+(sr.error||er.error).message;return}
- if(cr.error && !String(cr.error.message||"").includes("does not exist")){$("status").textContent="Kasa kapanış kaydı okunamadı: "+cr.error.message;return}
+ $("status").textContent="Gün sonu kayıtları veritabanından okunuyor…";
+ // Önce satışları tarih filtresi ve ilişkili tablo olmadan al. Böylece PostgREST
+ // ilişki/tarih filtresi kaynaklı sessiz 0 sonuç hataları önlenir.
+ let sr=await sb.from("sales").select("*").order("sale_date",{ascending:false}).limit(5000);
+ if(sr.error){
+  sr=await sb.from("sales").select("*").limit(5000);
+ }
+ if(sr.error){$("status").textContent="Satışlar okunamadı: "+sr.error.message;return;}
+ const daySales=(sr.data||[]).filter(x=>{
+  const day=String(x.sale_date||x.created_at||"").slice(0,10);
+  return day===d && !x.deleted_at;
+ });
+ const saleIds=daySales.map(x=>x.id).filter(Boolean);
+ let itemRows=[];
+ if(saleIds.length){
+  const ir=await sb.from("sale_items").select("*").in("sale_id",saleIds);
+  if(ir.error){$("status").textContent="Satışlar bulundu ("+daySales.length+") ancak ürün detayları okunamadı: "+ir.error.message;return;}
+  itemRows=ir.data||[];
+ }
+ const itemsBySale={};
+ itemRows.forEach(i=>{(itemsBySale[i.sale_id]||(itemsBySale[i.sale_id]=[])).push(i)});
+ daySales.forEach(x=>{x.sale_items=itemsBySale[x.id]||[]});
+ sr={data:daySales,error:null};
+ // Giderleri de aynı yöntemle gün bazında uygulama içinde süz.
+ let er=await sb.from("expenses").select("*").order("expense_date",{ascending:false}).limit(5000);
+ if(er.error) er=await sb.from("expenses").select("*").limit(5000);
+ if(er.error){$("status").textContent="Giderler okunamadı: "+er.error.message;return;}
+ er={data:(er.data||[]).filter(x=>String(x.expense_date||x.created_at||"").slice(0,10)===d && !x.deleted_at),error:null};
+ // Kasa kapanış tablosu bulunmasa veya erişilemiyor olsa da satış özeti çalışmalı.
+ let cr=await sb.from("cash_closings").select("*").eq("close_date",d).maybeSingle();
+ if(cr.error) cr={data:null,error:null};
  currentCashClose=cr.data||null;
  $("status").textContent=`Gün sonu yüklendi: ${(sr.data||[]).length} satış, ${(er.data||[]).length} gider.`;
  let gross=0,discountTotal=0,com=0,cour=0,cogs=0,by={},qty={},payments={},platformGross=0,platformCommission=0,platformNet=0,cashReceipts=0,cashExpenses=0,cardReceipts=0,onlineReceipts=0,otherReceipts=0,courierPackages=0,courierOrderTotal=0,courierOnlineTotal=0; let detail={cash:[],card:[],online:[],other:[]};
