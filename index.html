@@ -3,7 +3,7 @@
 <style>
 :root{--p:#35105f;--p2:#54228a;--y:#ffd52a;--bg:#f5f2f9;--ink:#24182e;--muted:#756b80;--line:#e6deed}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}header{background:linear-gradient(120deg,var(--p),var(--p2));color:white;padding:18px 16px}header b{font-size:24px}header small{display:block;color:#e4d8ef;font-size:11px;letter-spacing:2px;margin-top:3px}main{max-width:850px;margin:auto;padding:14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}h2{font-size:18px;margin:0 0 12px}label{display:block;font-size:12px;font-weight:800;color:#62566e;margin:8px 0 5px}input,select{width:100%;padding:12px;border:1px solid #d8cee3;border-radius:10px;font-size:16px;background:white}.btn{border:0;border-radius:11px;background:var(--p);color:white;padding:12px 16px;font-weight:900}.yellow{background:var(--y);color:var(--p)}.soft{background:#eee7f5;color:var(--p)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.tabs button{border:0;border-radius:10px;padding:10px 13px;background:#ffffff25;color:white;font-weight:800}.tabs button.active{background:var(--y);color:var(--p)}.page{display:none}.page.active{display:block}.row{display:flex;gap:9px}.row>div{flex:1;min-width:0}.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.prod{background:#fbf9fd;border:1px solid #e2d8eb;border-radius:13px;text-align:left;padding:12px;min-height:88px}.prod b{display:block;font-size:14px}.prod strong{display:block;color:var(--p2);font-size:18px;margin-top:8px}.cartrow{display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0}.cartrow .info{flex:1}.cartrow small{display:block;color:var(--muted)}.cartrow input{width:90px;padding:8px}.sum{font-size:24px;font-weight:950;color:var(--p)}.muted{color:var(--muted);font-size:12px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#fcfbfd;border:1px solid var(--line);border-radius:12px;padding:11px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:17px}.hidden{display:none!important}.notice{background:#fff8dc;border:1px solid #efdf9b;border-radius:11px;padding:10px;font-size:12px;line-height:1.45}.danger{color:#a21d27}.tx-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tx-actions button{font-size:12px;padding:8px 10px}.tx-item{border-bottom:1px solid var(--line);padding:10px 0}.tx-item:last-child{border-bottom:0}@media(min-width:600px){.products{grid-template-columns:repeat(3,1fr)}}
 </style></head><body>
-<header><b>BOLMİX</b><small>KASA • SATIŞ • KÂR / ZARAR</small><div class="tabs hidden" id="tabs"><button class="active" data-page="sale">Satış</button><button data-page="expense">Gider</button><button data-page="report">Gün Sonu</button><button data-page="transactions">İşlemler</button><button data-page="debts">Borçlar</button><button data-page="staff">Personel</button><button data-page="productsReport">Ürün Kârı</button><button data-page="monthly">Aylık Rapor</button><button data-page="settings">Ayarlar</button><button id="logout" style="margin-left:auto">Çıkış</button></div></header>
+<header><b>BOLMİX</b><small>KASA • SATIŞ • KÂR / ZARAR</small><div class="tabs hidden" id="tabs"><button class="active" data-page="sale">Satış</button><button data-page="expense">Gider</button><button data-page="report">Gün Sonu</button><button data-page="transactions">İşlemler</button><button data-page="settings">Ayarlar</button><button id="logout" style="margin-left:auto">Çıkış</button></div></header>
 <main>
 <section id="login" class="card"><h2>Yönetici Girişi</h2><p class="muted">BOLMİX POS hesabınla giriş yap.</p><label>E-posta</label><input id="email" type="email" autocomplete="username" value="bolmixtr@gmail.com"><label>Şifre</label><input id="password" type="password" autocomplete="current-password"><button class="btn yellow" id="loginBtn" style="width:100%;margin-top:12px">Giriş yap</button><p id="loginMsg" class="muted"></p></section>
 <section id="app" class="hidden">
@@ -29,20 +29,7 @@
  <div class="card"><h2>İptal edilen kayıtlar</h2><div id="txDeleted"></div></div>
  <div class="card"><h2>İşlem geçmişi</h2><div id="txAudit"></div></div>
 </div>
-<div class="page" id="debts">
- <div class="card"><h2>Borç / Alacaklı Ekle</h2><label>Alacaklı / borç adı</label><input id="debtName" placeholder="Örn. Katılımevim, toptancı"><div class="row"><div><label>Toplam borç (₺)</label><input id="debtTotal" type="number" min="0" step=".01"></div><div><label>Güncel kalan borç (₺)</label><input id="debtBalance" type="number" min="0" step=".01"></div></div><div class="row"><div><label>Aylık taksit (₺)</label><input id="debtMonthly" type="number" min="0" step=".01"></div><div><label>Sonraki ödeme tarihi</label><input id="debtDue" type="date"></div></div><label>Not</label><input id="debtNote" placeholder="İsteğe bağlı"><button class="btn yellow" id="debtAdd" style="width:100%;margin-top:10px">Borcu kaydet</button></div>
- <div class="card"><h2>Borçlarım</h2><div id="debtList"></div></div>
- <div class="card"><h2>Borç ödemesi kaydet</h2><label>Borç seç</label><select id="debtPayAccount"></select><div class="row"><div><label>Ödeme tutarı (₺)</label><input id="debtPayAmount" type="number" min="0" step=".01"></div><div><label>Ödeme tarihi</label><input id="debtPayDate" type="date"></div></div><label>Ödeme yöntemi</label><select id="debtPayMethod"><option>Nakit</option><option>Kredi kartı</option><option>IBAN</option><option>Havale / EFT</option></select><label>Açıklama</label><input id="debtPayNote"><button class="btn" id="debtPaySave" style="width:100%;margin-top:10px">Ödemeyi kaydet</button></div>
- <div class="card"><h2>Son borç ödemeleri</h2><div id="debtPayments"></div></div>
-</div> <div class="page" id="staff">
- <div class="card"><h2>Personel ekle</h2><label>Ad soyad</label><input id="staffName"><div class="row"><div><label>Aylık maaş (₺)</label><input id="staffSalary" type="number" min="0" step=".01"></div><div><label>İşe giriş tarihi</label><input id="staffStart" type="date"></div></div><button class="btn yellow" id="staffAdd" style="width:100%;margin-top:10px">Personeli kaydet</button></div>
- <div class="card"><h2>Personel listesi</h2><div id="staffList"></div></div>
- <div class="card"><h2>Maaş / avans ödemesi</h2><label>Personel</label><select id="staffPayPerson"></select><div class="row"><div><label>Tutar (₺)</label><input id="staffPayAmount" type="number" min="0" step=".01"></div><div><label>Ödeme tarihi</label><input id="staffPayDate" type="date"></div></div><label>Ödeme türü</label><select id="staffPayType"><option>Maaş</option><option>Avans</option><option>Prim</option><option>Diğer</option></select><label>Ödeme yöntemi</label><select id="staffPayMethod"><option>Nakit</option><option>Kredi kartı</option><option>IBAN</option><option>Havale / EFT</option></select><button class="btn" id="staffPaySave" style="width:100%;margin-top:10px">Ödemeyi kaydet</button></div>
- <div class="card"><h2>Personel ödeme geçmişi</h2><div id="staffPayments"></div></div>
-</div>
-<div class="page" id="productsReport"><div class="card"><h2>Ürün bazında kârlılık</h2><div class="row"><div><label>Başlangıç</label><input id="prodFrom" type="date"></div><div><label>Bitiş</label><input id="prodTo" type="date"></div></div><button class="btn" id="prodRun" style="width:100%;margin-top:10px">Raporu getir</button><div id="prodProfitList"></div></div></div>
-<div class="page" id="monthly"><div class="card"><h2>Aylık işletme raporu</h2><label>Ay</label><input id="monthPick" type="month"><button class="btn" id="monthRun" style="width:100%;margin-top:10px">Aylık raporu getir</button><div class="stats" style="margin-top:12px"><div class="stat"><small>Toplam ciro</small><b id="mRevenue">₺0</b></div><div class="stat"><small>İndirim</small><b id="mDiscount">₺0</b></div><div class="stat"><small>Komisyon + kurye</small><b id="mFees">₺0</b></div><div class="stat"><small>Ürün maliyeti</small><b id="mCogs">₺0</b></div><div class="stat"><small>Gider kayıtları</small><b id="mExpenses">₺0</b></div><div class="stat"><small>Personel ödemeleri</small><b id="mPayroll">₺0</b></div><div class="stat"><small>Borç ödemeleri</small><b id="mDebtPaid">₺0</b></div><div class="stat"><small>Tahmini faaliyet sonucu</small><b id="mOperating">₺0</b></div><div class="stat"><small>Borç ödemeleri sonrası nakit etkisi</small><b id="mCashAfterDebt">₺0</b></div></div><p class="muted">Personel ve borç ödemeleri ayrı gösterilir; giderlere ikinci kez eklenmez. Faaliyet sonucu KDV/vergi ve sabit gider payları hariç yaklaşık göstergedir.</p><div id="monthBreakdown"></div></div></div>
-<div class="page" id="settings"><div class="card"><h2>Menü fiyatları ve maliyetleri</h2><div id="menu"></div><button class="btn" id="saveMenu" style="width:100%">Menüyü kaydet</button></div><div class="card"><h2>Veri yedeği</h2><button class="btn soft" id="export">JSON yedeği indir</button></div></div>
+<div class="page" id="settings"><div class="card"><h2>Menü fiyatları ve maliyetleri</h2><div id="menu"></div><button class="btn" id="saveMenu" style="width:100%">Menüyü kaydet</button></div><div class="card"><h2>Veri yedeği</h2><button class="btn soft" id="export" style="width:100%">JSON yedeği indir</button></div></div>
 </section>
 <p class="muted" id="status"></p>
 </main>
@@ -53,658 +40,152 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_kVzQhcYUw6OpmenWc5eXTg_wxAV4EnN";
 const ADMIN_UID="cb561352-3c0e-41f8-a276-616014bda326";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const $=id=>document.getElementById(id), money=n=>(Number(n)||0).toLocaleString("tr-TR",{style:"currency",currency:"TRY"}), today=()=>new Date().toLocaleDateString("en-CA");
-let menu=[],cart=[],sales=[],expenses=[],currentCashClose=null;
-const PAYMENT_METHODS=["Nakit","Kredi kartı","Platform online ödeme","Platform nakit","Platform kart","IBAN"];
-const isCashMethod=m=>m==="Nakit"||m==="Platform nakit";
-
-async function sessionCheck(){
- const {data:{session}}=await sb.auth.getSession();
- if(session){
-  if(session.user.id!==ADMIN_UID){
-   await sb.auth.signOut();
-   $("loginMsg").textContent="Bu hesap BOLMİX yönetici hesabı değil.";
-   return;
-  }
-  showApp();
- }
-}
-function showApp(){
- $("login").classList.add("hidden");
- $("app").classList.remove("hidden");
- $("tabs").classList.remove("hidden");
- loadAll();
-}
-$("loginBtn").onclick=async()=>{
- $("loginMsg").textContent="Giriş kontrol ediliyor…";
- const {data,error}=await sb.auth.signInWithPassword({
-  email:$("email").value,password:$("password").value
- });
- if(error){$("loginMsg").textContent=error.message;return}
- if(data.user.id!==ADMIN_UID){
-  await sb.auth.signOut();
-  $("loginMsg").textContent="Bu hesap yetkili yönetici hesabı değil.";
-  return;
- }
- showApp();
-};
+let menu=[],cart=[],sales=[],expenses=[],currentCashClose=null; const PAYMENT_METHODS=["Nakit","Kredi kartı","Platform online ödeme","Platform nakit","Platform kart","IBAN"]; const isCashMethod=m=>m==="Nakit"||m==="Platform nakit";
+async function sessionCheck(){const {data:{session}}=await sb.auth.getSession();if(session){if(session.user.id!==ADMIN_UID){await sb.auth.signOut();$("loginMsg").textContent="Bu hesap BOLMİX yönetici hesabı değil.";return}showApp()}}
+function showApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("tabs").classList.remove("hidden");loadAll()}
+$("loginBtn").onclick=async()=>{ $("loginMsg").textContent="Giriş kontrol ediliyor…";const {data,error}=await sb.auth.signInWithPassword({email:$("email").value,password:$("password").value});if(error){$("loginMsg").textContent=error.message;return}if(data.user.id!==ADMIN_UID){await sb.auth.signOut();$("loginMsg").textContent="Bu hesap yetkili yönetici hesabı değil.";return}showApp()};
 $("logout").onclick=async()=>{await sb.auth.signOut();location.reload()};
-
-document.querySelectorAll(".tabs button[data-page]").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".tabs button[data-page]").forEach(x=>x.classList.toggle("active",x===b));
- document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page));
- if(b.dataset.page==="report")loadReport();
- if(b.dataset.page==="expense")loadExpenses();
- if(b.dataset.page==="transactions")loadTransactions();
- if(b.dataset.page==="debts")loadDebts();
- if(b.dataset.page==="staff")loadStaff();
- if(b.dataset.page==="productsReport")loadProductProfit();
- if(b.dataset.page==="monthly")loadMonthly();
-});
-
-async function loadAll(){
- await loadMenu();
- await loadExpenses();
- $("reportDate").value=today();
- $("reportDate").onchange=loadReport;
- loadReport();
-}
-async function loadMenu(){
- let {data,error}=await sb.from("products").select("*").eq("active",true).order("id");
- if(error){$("products").textContent="Ürünler yüklenemedi: "+error.message;return}
- menu=data||[];
- renderProducts();
- renderMenuEditor();
-}
-function unitPrice(p){
- let ch=$("channel").value,cp=p.channel_prices||{};
- if(p.is_bundle){
-  if(!Object.prototype.hasOwnProperty.call(cp,ch))return null;
-  return Number(cp[ch]);
- }
- if(Object.prototype.hasOwnProperty.call(cp,ch))return Number(cp[ch]);
- return Number(p.price)+(ch==="Telefon"&&p.is_wrap?10:0);
-}
-function renderProducts(){
- $("products").innerHTML="";
- menu.forEach(p=>{
-  let price=unitPrice(p);
-  if(price===null)return;
-  let b=document.createElement("button");
-  b.className="prod";
-  b.innerHTML="<b>"+p.name+"</b><strong>"+money(price)+"</strong>";
-  b.onclick=()=>{
-   let x=cart.find(x=>x.id===p.id);
-   if(x)x.qty++;
-   else cart.push({id:p.id,name:p.name,cost:Number(p.cost),price,qty:1});
-   renderCart();
-  };
-  $("products").appendChild(b);
- });
-}
+document.querySelectorAll(".tabs button[data-page]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button[data-page]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page));if(b.dataset.page==="report")loadReport();if(b.dataset.page==="expense")loadExpenses();if(b.dataset.page==="transactions")loadTransactions();});
+async function loadAll(){await loadMenu();await loadExpenses();$("reportDate").value=today();$("reportDate").onchange=loadReport;loadReport()}
+async function loadMenu(){let {data,error}=await sb.from("products").select("*").eq("active",true).order("id");if(error){$("products").textContent="Ürünler yüklenemedi: "+error.message;return}menu=data||[];renderProducts();renderMenuEditor()}
+function unitPrice(p){let ch=$("channel").value;let cp=p.channel_prices||{};if(p.is_bundle){if(!Object.prototype.hasOwnProperty.call(cp,ch))return null;return Number(cp[ch])}if(Object.prototype.hasOwnProperty.call(cp,ch))return Number(cp[ch]);return Number(p.price)+(ch==="Telefon"&&p.is_wrap?10:0)}
+function renderProducts(){$("products").innerHTML="";menu.forEach(p=>{let price=unitPrice(p);if(price===null)return;let b=document.createElement("button");b.className="prod";b.innerHTML="<b>"+p.name+"</b><strong>"+money(price)+"</strong>";b.onclick=()=>{let x=cart.find(x=>x.id===p.id);if(x)x.qty++;else cart.push({id:p.id,name:p.name,cost:Number(p.cost),price,qty:1});renderCart()};$("products").appendChild(b)})}
 $("channel").onchange=()=>{cart=[];renderProducts();renderCart()};
-
-function renderCart(){
- $("cart").innerHTML="";
- if(!cart.length)$("cart").innerHTML='<p class="muted">Ürün seçerek sepete ekle.</p>';
- cart.forEach((x,i)=>{
-  let r=document.createElement("div");
-  r.className="cartrow";
-  r.innerHTML='<div class="info"><b>'+x.name+'</b><small>'+x.qty+' adet</small></div><input type="number" min="0" step=".01" value="'+x.price+'"><button class="btn soft">−</button><button class="btn soft">×</button>';
-  r.querySelector("input").onchange=e=>{x.price=Math.max(0,Number(e.target.value)||0);renderCart()};
-  let bs=r.querySelectorAll("button");
-  bs[0].onclick=()=>{x.qty=Math.max(1,x.qty-1);renderCart()};
-  bs[1].onclick=()=>{cart.splice(i,1);renderCart()};
-  $("cart").appendChild(r);
- });
- let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0);
- let discount=Math.max(0,Number($("discount").value)||0);
- $("subtotal").textContent=money(subtotal);
- $("total").textContent=money(Math.max(0,subtotal-discount));
-}
+ function renderCart(){$("cart").innerHTML="";if(!cart.length)$("cart").innerHTML='<p class="muted">Ürün seçerek sepete ekle.</p>';cart.forEach((x,i)=>{let r=document.createElement("div");r.className="cartrow";r.innerHTML='<div class="info"><b>'+x.name+'</b><small>'+x.qty+' adet</small></div><input type="number" min="0" step=".01" value="'+x.price+'"><button class="btn soft">−</button><button class="btn soft">×</button>';r.querySelector("input").onchange=e=>{x.price=Math.max(0,Number(e.target.value)||0);renderCart()};let bs=r.querySelectorAll("button");bs[0].onclick=()=>{x.qty=Math.max(1,x.qty-1);renderCart()};bs[1].onclick=()=>{cart.splice(i,1);renderCart()};$("cart").appendChild(r)});let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);$("subtotal").textContent=money(subtotal);$("total").textContent=money(Math.max(0,subtotal-discount))}
 $("discount").oninput=renderCart;
-
-$("saveSale").onclick=async()=>{
- if(!cart.length){alert("Önce ürün seç.");return}
- let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0);
- let discount=Math.max(0,Number($("discount").value)||0);
- if(discount>subtotal){alert("İndirim ürün toplamından fazla olamaz.");return}
- let total=subtotal-discount,channel=$("channel").value;
- let platform=["Yemeksepeti","Trendyol","Migros"].includes(channel);
- let courier=$("delivery").value==="courier"?102:0;
- let payment_method=$("paymentMethod").value;
- let {data,error}=await sb.from("sales").insert({
-  sale_date:today(),channel,delivery:$("delivery").value,total,
-  commission:platform?total*.15:0,courier_cost:courier,
-  payment_method,discount_amount:discount,list_total:subtotal
- }).select().single();
- if(error){alert("Satış kaydedilemedi: "+error.message);return}
- let items=cart.map(x=>({
-  sale_id:data.id,product_id:x.id,product_name:x.name,
-  quantity:x.qty,unit_price:x.price,unit_cost:x.cost
- }));
- let res=await sb.from("sale_items").insert(items);
- if(res.error){
-  alert("Satış başlığı kaydedildi ancak ürün satırları kaydedilemedi. Yönetici kontrolü gerekli: "+res.error.message);
-  return;
- }
- cart=[];$("discount").value="0";renderCart();
- alert("Satış kaydedildi.");loadReport();
-};
-
-$("addExpense").onclick=async()=>{
- let description=$("exName").value.trim(),amount=Number($("exAmount").value);
- if(!description||amount<=0){alert("Açıklama ve tutar gir.");return}
- let {error}=await sb.from("expenses").insert({
-  expense_date:today(),description,category:$("exType").value,
-  amount,payment_method:$("exPaymentMethod").value
- });
- if(error){alert(error.message);return}
- $("exName").value="";$("exAmount").value="";
- loadExpenses();alert("Gider kaydedildi.");
-};
-async function loadExpenses(){
- let {data,error}=await sb.from("expenses").select("*")
- .eq("expense_date",today()).is("deleted_at",null)
- .order("id",{ascending:false});
- if(error){$("expenseList").textContent=error.message;return}
- expenses=data||[];
- $("expenseList").innerHTML=expenses.map(x=>
-  '<div class="cartrow"><div class="info"><b>'+x.description+'</b><small>'+x.category+' • '+(x.payment_method||"Eski kayıt")+'</small></div><b>'+money(x.amount)+'</b></div>'
- ).join("")||'<p class="muted">Bugün gider yok.</p>';
-} async function loadReport(){
- const d=$("reportDate").value||today();
- const [sr,er,cr]=await Promise.all([
+$("saveSale").onclick=async()=>{if(!cart.length){alert("Önce ürün seç.");return}let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0),discount=Math.max(0,Number($("discount").value)||0);if(discount>subtotal){alert("İndirim ürün toplamından fazla olamaz.");return}let total=subtotal-discount,channel=$("channel").value,platform=["Yemeksepeti","Trendyol","Migros"].includes(channel),courier=$("delivery").value==="courier"?102:0;let payment_method=$("paymentMethod").value;let {data,error}=await sb.from("sales").insert({sale_date:today(),channel,delivery:$("delivery").value,total,commission:platform?total*.15:0,courier_cost:courier,payment_method,discount_amount:discount,list_total:subtotal}).select().single();if(error){alert("Satış kaydedilemedi: "+error.message);return}let items=cart.map(x=>({sale_id:data.id,product_id:x.id,product_name:x.name,quantity:x.qty,unit_price:x.price,unit_cost:x.cost}));let res=await sb.from("sale_items").insert(items);if(res.error){alert("Satış başlığı kaydedildi ancak ürün satırları kaydedilemedi. Yönetici kontrolü gerekli: "+res.error.message);return}cart=[];$("discount").value="0";renderCart();alert("Satış kaydedildi.");loadReport()};
+$("addExpense").onclick=async()=>{let description=$("exName").value.trim(),amount=Number($("exAmount").value);if(!description||amount<=0){alert("Açıklama ve tutar gir.");return}let {error}=await sb.from("expenses").insert({expense_date:today(),description,category:$("exType").value,amount,payment_method:$("exPaymentMethod").value});if(error){alert(error.message);return}$("exName").value="";$("exAmount").value="";loadExpenses();alert("Gider kaydedildi.")};
+async function loadExpenses(){let {data,error}=await sb.from("expenses").select("*").eq("expense_date",today()).is("deleted_at",null).order("id",{ascending:false});if(error){$("expenseList").textContent=error.message;return}expenses=data||[];$("expenseList").innerHTML=expenses.map(x=>'<div class="cartrow"><div class="info"><b>'+x.description+'</b><small>'+x.category+' • '+(x.payment_method||"Eski kayıt")+'</small></div><b>'+money(x.amount)+'</b></div>').join("")||'<p class="muted">Bugün gider yok.</p>'}
+async function loadReport(){
+ let d=$("reportDate").value||today();
+ let [sr,er,cr]=await Promise.all([
   sb.from("sales").select("*,sale_items(*)").eq("sale_date",d).is("deleted_at",null),
   sb.from("expenses").select("*").eq("expense_date",d).is("deleted_at",null),
   sb.from("cash_closings").select("*").eq("close_date",d).maybeSingle()
  ]);
- if(sr.error||er.error){alert("Rapor yüklenemedi.");return}
- const ss=sr.data||[],ee=er.data||[];
- const sum=(a,f)=>a.reduce((n,x)=>n+f(x),0);
- const revenue=sum(ss,x=>Number(x.total)||0);
- const gross=sum(ss,x=>Number(x.list_total??x.total)||0);
- const discount=sum(ss,x=>Number(x.discount_amount)||0);
- const commission=sum(ss,x=>Number(x.commission)||0);
- const courier=sum(ss,x=>Number(x.courier_cost)||0);
- const cost=sum(ss,x=>sum(x.sale_items||[],i=>(Number(i.quantity)||0)*(Number(i.unit_cost)||0)));
- const expense=sum(ee,x=>Number(x.amount)||0);
- $("gross").textContent=money(gross);
- $("discountTotal").textContent=money(discount);
- $("commission").textContent=money(commission);
- $("courier").textContent=money(courier);
- $("cogs").textContent=money(cost);
- $("expenses").textContent=money(expense);
- $("profit").textContent=money(revenue-commission-courier-cost-expense);
-
- const methods={};
- ss.forEach(x=>methods[x.payment_method||"Belirtilmemiş"]=(methods[x.payment_method||"Belirtilmemiş"]||0)+Number(x.total||0));
- $("payments").innerHTML=Object.entries(methods).map(([k,v])=>`<div class="tx-item">${safeText(k)} <b style="float:right">${money(v)}</b></div>`).join("")||"Satış yok.";
-
- const platforms={};
- ss.filter(x=>["Yemeksepeti","Trendyol","Migros"].includes(x.channel)).forEach(x=>platforms[x.channel]=(platforms[x.channel]||0)+Number(x.total||0));
- $("platformSummary").innerHTML=Object.entries(platforms).map(([k,v])=>`<div class="tx-item">${safeText(k)} <b style="float:right">${money(v)}</b></div>`).join("")||"Platform satışı yok.";
-
- const channels={};
- ss.forEach(x=>channels[x.channel]=(channels[x.channel]||0)+Number(x.total||0));
- $("channels").innerHTML=Object.entries(channels).map(([k,v])=>`<div class="tx-item">${safeText(k)} <b style="float:right">${money(v)}</b></div>`).join("")||"Satış yok.";
-
- const quantities={};
- ss.forEach(x=>(x.sale_items||[]).forEach(i=>quantities[i.product_name]=(quantities[i.product_name]||0)+Number(i.quantity||0)));
- $("quantities").innerHTML=Object.entries(quantities).map(([k,v])=>`<div class="tx-item">${safeText(k)} <b style="float:right">${v} adet</b></div>`).join("")||"Ürün satışı yok.";
-
- const cash=sum(ss.filter(x=>isCashMethod(x.payment_method)),x=>Number(x.total)||0);
- const cashEx=sum(ee.filter(x=>x.payment_method==="Nakit"),x=>Number(x.amount)||0);
- const opening=cr.data?Number(cr.data.opening_cash)||0:Number($("openingCash").value)||0;
- const expected=opening+cash-cashEx;
- $("openingCash").value=opening;
- $("cashReceipts").textContent=money(cash);
- $("cashExpenses").textContent=money(cashEx);
- $("expectedCash").textContent=money(expected);
- $("countedCash").value=cr.data?.counted_cash??"";
- $("cashDifference").textContent=cr.data?money(cr.data.cash_difference):"Henüz sayılmadı";
- $("cashNote").value=cr.data?.notes||"";
+ if(sr.error||er.error){$("status").textContent=(sr.error||er.error).message;return}
+ if(cr.error && !String(cr.error.message||"").includes("does not exist")){$("status").textContent=cr.error.message;return}
  currentCashClose=cr.data||null;
+ let gross=0,discountTotal=0,com=0,cour=0,cogs=0,by={},qty={},payments={},platformGross=0,platformCommission=0,platformNet=0,cashReceipts=0,cashExpenses=0;
+ (sr.data||[]).forEach(s=>{
+  let total=Number(s.total)||0,method=s.payment_method||"Belirtilmemiş";
+  gross+=Number(s.list_total??(total+(Number(s.discount_amount)||0)))||0;discountTotal+=Number(s.discount_amount)||0;com+=Number(s.commission)||0;cour+=Number(s.courier_cost)||0;
+  by[s.channel]=(by[s.channel]||0)+total;
+  payments[method]=(payments[method]||0)+total;
+  if(["Yemeksepeti","Trendyol","Migros"].includes(s.channel)){
+   platformGross+=total;platformCommission+=Number(s.commission)||0;platformNet+=total-(Number(s.commission)||0);
+  }
+  if(isCashMethod(method))cashReceipts+=total;
+  (s.sale_items||[]).forEach(i=>{cogs+=(Number(i.quantity)||0)*(Number(i.unit_cost)||0);qty[i.product_name]=(qty[i.product_name]||0)+(Number(i.quantity)||0)});
+ });
+ let ex=(er.data||[]).reduce((a,x)=>a+(Number(x.amount)||0),0);
+ (er.data||[]).forEach(x=>{if(isCashMethod(x.payment_method))cashExpenses+=Number(x.amount)||0});
+ let profit=gross-com-cour-cogs-ex;
+ [["gross",gross],["discountTotal",discountTotal],["commission",com],["courier",cour],["cogs",cogs],["expenses",ex],["profit",profit]].forEach(([id,v])=>$(id).textContent=money(v));
+ $("channels").innerHTML=Object.entries(by).map(([k,v])=>'<div class="cartrow"><div class="info">'+k+'</div><b>'+money(v)+'</b></div>').join("")||'<p class="muted">Satış yok.</p>';
+ $("quantities").innerHTML=Object.entries(qty).map(([k,v])=>'<div class="cartrow"><div class="info">'+k+'</div><b>'+v+' adet</b></div>').join("")||'<p class="muted">Satış yok.</p>';
+ $("payments").innerHTML=PAYMENT_METHODS.map(k=>'<div class="cartrow"><div class="info">'+k+'</div><b>'+money(payments[k]||0)+'</b></div>').join("")+(payments["Belirtilmemiş"]?'<div class="cartrow"><div class="info">Eski / belirtilmemiş kayıt</div><b>'+money(payments["Belirtilmemiş"])+'</b></div>':"");
+ $("platformSummary").innerHTML='<div class="cartrow"><div class="info">Platform brüt sipariş</div><b>'+money(platformGross)+'</b></div><div class="cartrow"><div class="info">Komisyon</div><b>'+money(platformCommission)+'</b></div><div class="cartrow"><div class="info">Komisyon sonrası tutar</div><b>'+money(platformNet)+'</b></div>';
+ let opening=currentCashClose?Number(currentCashClose.opening_cash)||0:0;
+ $("openingCash").value=opening;
+ $("countedCash").value=currentCashClose&&currentCashClose.counted_cash!==null?currentCashClose.counted_cash:"";
+ $("cashNote").value=currentCashClose?.notes||"";
+ let expected=opening+cashReceipts-cashExpenses;
+ $("cashReceipts").textContent=money(cashReceipts);$("cashExpenses").textContent=money(cashExpenses);$("expectedCash").textContent=money(expected);
+ let counted=$("countedCash").value===""?null:Number($("countedCash").value);
+ $("cashDifference").textContent=counted===null?"—":money(counted-expected);
+ $("cashCloseStatus").textContent=currentCashClose?"Bu tarih için kayıtlı kasa kapanışı var. Değiştirip yeniden kaydedebilirsin.":"Kasa kapanışı henüz kaydedilmedi. Nakit dışındaki tahsilatlar fiziksel kasaya eklenmez.";
 }
-
+$("countedCash").oninput=()=>{let expected=parseMoney($("expectedCash").textContent);$("cashDifference").textContent=$("countedCash").value===""?"—":money(Number($("countedCash").value)-expected)};
+function parseMoney(s){return Number(String(s||"").replace(/[^\d,-]/g,"").replace(/\./g,"").replace(",", "."))||0}
 $("saveCashClose").onclick=async()=>{
- const d=$("reportDate").value||today();
- const opening=Number($("openingCash").value);
- const counted=Number($("countedCash").value);
- if(!Number.isFinite(opening)||opening<0||$("countedCash").value===""||!Number.isFinite(counted)||counted<0)return alert("Kasa tutarlarını kontrol et.");
- const expected=opening+parseMoney($("cashReceipts").textContent)-parseMoney($("cashExpenses").textContent);
- const {error}=await sb.from("cash_closings").upsert({
-  close_date:d,opening_cash:opening,expected_cash:expected,
-  counted_cash:counted,cash_difference:counted-expected,
-  notes:$("cashNote").value.trim()
- },{onConflict:"close_date"});
- if(error)return alert(error.message);
+ let d=$("reportDate").value||today(),opening=Number($("openingCash").value),counted=Number($("countedCash").value);
+ if(!Number.isFinite(opening)||opening<0||$("countedCash").value===""||!Number.isFinite(counted)||counted<0){alert("Açılış ve sayılan kasa tutarını doğru gir.");return}
+ let cashReceipts=parseMoney($("cashReceipts").textContent),cashExpenses=parseMoney($("cashExpenses").textContent),expected=opening+cashReceipts-cashExpenses;
+ let payload={close_date:d,opening_cash:opening,expected_cash:expected,counted_cash:counted,cash_difference:counted-expected,notes:$("cashNote").value.trim()};
+ let {error}=await sb.from("cash_closings").upsert(payload,{onConflict:"close_date"});
+ if(error){alert("Kasa kapanışı kaydedilemedi: "+error.message);return}
+ currentCashClose=payload;$("cashCloseStatus").textContent="Kasa kapanışı kaydedildi.";
  alert("Kasa kapanışı kaydedildi.");
- await loadReport();
-};
-
-function parseMoney(v){return Number(String(v).replace(/[^\d,.-]/g,"").replace(/\./g,"").replace(",", "."))||0}
-
-function renderMenuEditor(){
- $("menu").innerHTML=menu.map(p=>`
- <div class="card"><b>${safeText(p.name)}</b>
- <div class="row">
- <div><label>Satış fiyatı</label><input type="number" step=".01" data-price="${p.id}" value="${p.price}"></div>
- <div><label>Birim maliyet</label><input type="number" step=".01" data-cost="${p.id}" value="${p.cost}"></div>
- </div></div>`).join("");
+ loadReport();
 }
-$("saveMenu").onclick=async()=>{
- for(const p of menu){
-  const price=Number(document.querySelector(`[data-price="${p.id}"]`).value);
-  const cost=Number(document.querySelector(`[data-cost="${p.id}"]`).value);
-  const {error}=await sb.from("products").update({price,cost}).eq("id",p.id);
-  if(error)return alert(error.message);
- }
- alert("Menü kaydedildi.");
- await loadMenu();
-};
+function renderMenuEditor(){$("menu").innerHTML=menu.map(p=>{let cp=p.channel_prices||{};let channelFields=p.is_bundle?['Trendyol','Migros','Yemeksepeti'].map(ch=>'<div><label>'+ch+' fiyatı</label><input type="number" step=".01" data-channel-price="'+p.id+'" data-channel="'+ch+'" value="'+(cp[ch]??'')+'" placeholder="Bu kanalda yok"></div>').join(''):'';return '<div class="card"><b>'+p.name+'</b><div class="row"><div><label>'+(p.is_bundle?'Varsayılan fiyat (kullanılmaz)':'Satış fiyatı')+'</label><input type="number" step=".01" data-price="'+p.id+'" value="'+p.price+'"></div><div><label>Birim maliyet</label><input type="number" step=".01" data-cost="'+p.id+'" value="'+p.cost+'"></div></div>'+(p.is_bundle?'<div class="row">'+channelFields+'</div>':'')+'</div>'}).join("")}
+$("saveMenu").onclick=async()=>{for(let p of menu){let price=Number(document.querySelector('[data-price="'+p.id+'"]').value),cost=Number(document.querySelector('[data-cost="'+p.id+'"]').value);let update={price,cost};if(p.is_bundle){let cp={};document.querySelectorAll('[data-channel-price="'+p.id+'"]').forEach(el=>{if(el.value.trim()!=='')cp[el.dataset.channel]=Number(el.value)});update.channel_prices=cp}let {error}=await sb.from("products").update(update).eq("id",p.id);if(error){alert(error.message);return}}alert("Menü kaydedildi.");loadMenu()};
+$("export").onclick=async()=>{let [a,b,c,d]=await Promise.all([sb.from("products").select("*"),sb.from("sales").select("*,sale_items(*)"),sb.from("expenses").select("*"),sb.from("cash_closings").select("*")]);if(a.error||b.error||c.error||d.error){alert("Yedek alınamadı.");return}let blob=new Blob([JSON.stringify({products:a.data,sales:b.data,expenses:c.data,cash_closings:d.data},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="bolmix-yedek-"+today()+".json";link.click();URL.revokeObjectURL(url)};
 
-$("export").onclick=async()=>{
- const tables=["products","sales","sale_items","expenses","cash_closings","debt_accounts","debt_payments","staff","staff_payments"];
- const backup={};
- for(const table of tables){
-  const {data,error}=await sb.from(table).select("*");
-  if(error)return alert(table+" yedeklenemedi: "+error.message);
-  backup[table]=data;
- }
- const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;a.download="bolmix-yedek-"+today()+".json";a.click();
- URL.revokeObjectURL(url);
-};
-
+// İŞLEM YÖNETİMİ — silme işlemleri geri alınabilir (soft delete).
+const txMoney = n => (Number(n)||0).toLocaleString("tr-TR",{style:"currency",currency:"TRY"});
+const txEscape = v => String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function txRange(){
+ const from=$("txFrom").value||today(), to=$("txTo").value||today();
+ return {from,to};
+}
 async function loadTransactions(){
- const from=$("txFrom").value||today(),to=$("txTo").value||today();
- const [s,e,ds,de,a]=await Promise.all([
+ const {from,to}=txRange();
+ $("txSales").textContent="Yükleniyor…";$("txExpenses").textContent="Yükleniyor…";
+ const [salesRes,expensesRes,deletedSalesRes,deletedExpensesRes,auditRes]=await Promise.all([
   sb.from("sales").select("*,sale_items(*)").gte("sale_date",from).lte("sale_date",to).is("deleted_at",null).order("created_at",{ascending:false}).limit(100),
   sb.from("expenses").select("*").gte("expense_date",from).lte("expense_date",to).is("deleted_at",null).order("id",{ascending:false}).limit(100),
-  sb.from("sales").select("*").not("deleted_at","is",null).gte("sale_date",from).lte("sale_date",to).limit(50),
-  sb.from("expenses").select("*").not("deleted_at","is",null).gte("expense_date",from).lte("expense_date",to).limit(50),
+  sb.from("sales").select("*,sale_items(*)").not("deleted_at","is",null).gte("sale_date",from).lte("sale_date",to).order("created_at",{ascending:false}).limit(50),
+  sb.from("expenses").select("*").not("deleted_at","is",null).gte("expense_date",from).lte("expense_date",to).order("id",{ascending:false}).limit(50),
   sb.from("audit_logs").select("*").order("changed_at",{ascending:false}).limit(30)
  ]);
- const err=[s,e,ds,de,a].find(x=>x.error);
- if(err){$("txSales").textContent=err.error.message;return}
- $("txSales").innerHTML=(s.data||[]).map(x=>`
- <div class="tx-item"><b>${safeText(x.channel)} • ${safeText(x.sale_date)}</b>
- <div>${money(x.total)} • ${safeText(x.payment_method)}</div>
- <small>${(x.sale_items||[]).map(i=>safeText(i.product_name)+" × "+i.quantity).join(", ")}</small>
- <div class="tx-actions"><button class="btn soft" onclick="txEditSale('${x.id}')">Düzenle</button><button class="btn soft danger" onclick="txDelete('sales','${x.id}')">İptal et</button></div></div>`).join("")||"Satış yok.";
- $("txExpenses").innerHTML=(e.data||[]).map(x=>`
- <div class="tx-item"><b>${safeText(x.description)}</b><div>${money(x.amount)} • ${safeText(x.category)}</div>
- <div class="tx-actions"><button class="btn soft" onclick="txEditExpense('${x.id}')">Düzenle</button><button class="btn soft danger" onclick="txDelete('expenses','${x.id}')">İptal et</button></div></div>`).join("")||"Gider yok.";
- const deleted=[...(ds.data||[]).map(x=>({...x,kind:"sales",label:"Satış • "+x.channel+" • "+money(x.total)})),...(de.data||[]).map(x=>({...x,kind:"expenses",label:"Gider • "+x.description+" • "+money(x.amount)}))];
- $("txDeleted").innerHTML=deleted.map(x=>`<div class="tx-item">${safeText(x.label)} <button class="btn soft" onclick="txRestore('${x.kind}','${x.id}')">Geri al</button></div>`).join("")||"İptal edilmiş kayıt yok.";
- $("txAudit").innerHTML=(a.data||[]).map(x=>`<div class="tx-item">${safeText(x.table_name)} • ${safeText(x.action)} • ${safeText(x.changed_at)}</div>`).join("")||"İşlem geçmişi yok.";
+ const err=[salesRes,expensesRes,deletedSalesRes,deletedExpensesRes,auditRes].find(x=>x.error);
+ if(err){$("txSales").textContent="İşlem yönetimi yüklenemedi: "+err.error.message;return}
+ const salesData=salesRes.data||[], expensesData=expensesRes.data||[];
+ $("txSales").innerHTML=salesData.map(s=>`<div class="tx-item"><b>${txEscape(s.channel)} • ${txEscape(s.sale_date)}</b><div>${txMoney(s.total)} • ${txEscape(s.payment_method||"Belirtilmemiş")}</div><small class="muted">${(s.sale_items||[]).map(i=>txEscape(i.product_name)+" × "+Number(i.quantity)).join(", ")}</small><div class="tx-actions"><button class="btn soft" onclick="txEditSale('${s.id}')">Düzenle</button><button class="btn soft danger" onclick="txDelete('sales','${s.id}')">İptal et</button></div></div>`).join("")||'<p class="muted">Bu tarih aralığında satış yok.</p>';
+ $("txExpenses").innerHTML=expensesData.map(e=>`<div class="tx-item"><b>${txEscape(e.description)}</b><div>${txMoney(e.amount)} • ${txEscape(e.category||"")} • ${txEscape(e.expense_date)}</div><small class="muted">${txEscape(e.payment_method||"Belirtilmemiş")}</small><div class="tx-actions"><button class="btn soft" onclick="txEditExpense('${e.id}')">Düzenle</button><button class="btn soft danger" onclick="txDelete('expenses','${e.id}')">İptal et</button></div></div>`).join("")||'<p class="muted">Bu tarih aralığında gider yok.</p>';
+ const deleted=[...(deletedSalesRes.data||[]).map(x=>({...x,_kind:"sales",_label:"Satış • "+x.channel+" • "+txMoney(x.total)})),...(deletedExpensesRes.data||[]).map(x=>({...x,_kind:"expenses",_label:"Gider • "+x.description+" • "+txMoney(x.amount)}))];
+ $("txDeleted").innerHTML=deleted.map(x=>`<div class="tx-item"><b>${txEscape(x._label)}</b><div class="tx-actions"><button class="btn soft" onclick="txRestore('${x._kind}','${x.id}')">Geri al</button></div></div>`).join("")||'<p class="muted">İptal edilmiş kayıt yok.</p>';
+ $("txAudit").innerHTML=(auditRes.data||[]).map(a=>`<div class="tx-item"><b>${txEscape(a.table_name)} • ${txEscape(a.action)}</b><div class="muted">${new Date(a.changed_at).toLocaleString("tr-TR")} • ${txEscape(a.record_id)}</div></div>`).join("")||'<p class="muted">Henüz işlem geçmişi yok.</p>';
 }
-$("txRefresh").onclick=loadTransactions;
-
+window.txEditSale=async id=>{
+ const {data:s,error}=await sb.from("sales").select("*,sale_items(*)").eq("id",id).single();
+ if(error){alert(error.message);return}
+ const total=prompt("Tahsil edilen toplam tutar (₺):",s.total);if(total===null)return;
+ const discount=prompt("İşletme indirimi (₺):",s.discount_amount||0);if(discount===null)return;
+ const method=prompt("Tahsilat yöntemi (Nakit / Kredi kartı / Platform online ödeme / Platform nakit / Platform kart / IBAN):",s.payment_method||"Nakit");if(method===null)return;
+ const channel=prompt("Sipariş kanalı:",s.channel);if(channel===null)return;
+ const amount=Number(total),disc=Number(discount);
+ if(!Number.isFinite(amount)||amount<0||!Number.isFinite(disc)||disc<0){alert("Tutarları kontrol et.");return}
+ const upd={total:amount,discount_amount:disc,list_total:amount+disc,payment_method:method,channel};
+ const {error:ue}=await sb.from("sales").update(upd).eq("id",id);
+ if(ue){alert("Satış güncellenemedi: "+ue.message);return}
+ // Ürün miktarı ve satır fiyatı düzenleme: var olan satırları tek tek güncelle.
+ for(const item of (s.sale_items||[])){
+  const q=prompt(item.product_name+" — adet:",item.quantity);if(q===null)continue;
+  const price=prompt(item.product_name+" — birim satış fiyatı (₺):",item.unit_price);if(price===null)continue;
+  const quantity=Number(q),unit_price=Number(price);
+  if(!Number.isFinite(quantity)||quantity<0||!Number.isFinite(unit_price)||unit_price<0){alert("Ürün adet/fiyatı geçersiz. Satış başlığı kaydedildi; ürün satırını kontrol et.");continue}
+  const {error:ie}=await sb.from("sale_items").update({quantity,unit_price}).eq("id",item.id);
+  if(ie)alert("Ürün satırı güncellenemedi: "+ie.message);
+ }
+ alert("Satış bilgileri güncellendi.");await loadTransactions();await loadReport();
+};
+window.txEditExpense=async id=>{
+ const {data:e,error}=await sb.from("expenses").select("*").eq("id",id).single();if(error){alert(error.message);return}
+ const description=prompt("Gider açıklaması:",e.description);if(description===null)return;
+ const amount=prompt("Gider tutarı (₺):",e.amount);if(amount===null)return;
+ const payment_method=prompt("Ödeme yöntemi:",e.payment_method||"Nakit");if(payment_method===null)return;
+ if(!description.trim()||!Number.isFinite(Number(amount))||Number(amount)<=0){alert("Açıklama ve tutarı kontrol et.");return}
+ const {error:ue}=await sb.from("expenses").update({description:description.trim(),amount:Number(amount),payment_method}).eq("id",id);
+ if(ue){alert(ue.message);return}alert("Gider güncellendi.");await loadTransactions();await loadExpenses();await loadReport();
+};
 window.txDelete=async(table,id)=>{
- if(!confirm("Bu kayıt iptal edilsin mi?"))return;
- const {data:{user}}=await sb.auth.getUser();
- const {error}=await sb.from(table).update({deleted_at:new Date().toISOString(),deleted_by:user.id}).eq("id",id);
- if(error)return alert(error.message);
- await loadTransactions();await loadExpenses();await loadReport();
+ if(!confirm("Bu kayıt iptal edilecek. Tamamen silinmez; geri alabilirsin. Devam edilsin mi?"))return;
+ const {error}=await sb.from(table).update({deleted_at:new Date().toISOString(),deleted_by:(await sb.auth.getUser()).data.user.id}).eq("id",id);
+ if(error){alert("İptal edilemedi: "+error.message);return}
+ alert("Kayıt iptal edildi.");await loadTransactions();await loadExpenses();await loadReport();
 };
 window.txRestore=async(table,id)=>{
- if(!confirm("Kayıt geri alınsın mı?"))return;
+ if(!confirm("Bu kayıt tekrar aktif edilsin mi?"))return;
  const {error}=await sb.from(table).update({deleted_at:null,deleted_by:null}).eq("id",id);
- if(error)return alert(error.message);
- await loadTransactions();await loadExpenses();await loadReport();
+ if(error){alert("Geri alınamadı: "+error.message);return}
+ alert("Kayıt geri alındı.");await loadTransactions();await loadExpenses();await loadReport();
 };
+$("txRefresh").onclick=loadTransactions;
 
-window.txEditExpense=async id=>{
- const {data:x,error}=await sb.from("expenses").select("*").eq("id",id).single();
- if(error)return alert(error.message);
- const desc=prompt("Gider açıklaması",x.description);if(desc===null)return;
- const amount=prompt("Gider tutarı",x.amount);if(amount===null)return;
- if(!desc.trim()||Number(amount)<=0)return alert("Bilgileri kontrol et.");
- const {error:e}=await sb.from("expenses").update({description:desc.trim(),amount:Number(amount)}).eq("id",id);
- if(e)return alert(e.message);
- await loadTransactions();await loadExpenses();await loadReport();
-};
-window.txEditSale=async id=>{
- alert("Satış düzenlemesi için mevcut satış kaydını ve ürün detaylarını birlikte kontrol etmek gerekiyor. İptal edip doğru tutarla yeniden kaydetmek daha güvenli.");
-};
-
-async function loadDebts(){
- const [a,p]=await Promise.all([
-  sb.from("debt_accounts").select("*").eq("active",true).order("created_at"),
-  sb.from("debt_payments").select("*,debt_accounts(name)").order("payment_date",{ascending:false}).limit(30)
- ]);
- if(a.error||p.error){$("debtList").textContent="Borç tablolarını kontrol et.";return}
- const rows=a.data||[];
- $("debtPayAccount").innerHTML=rows.map(x=>`<option value="${x.id}">${safeText(x.name)} — kalan ${money(x.balance)}</option>`).join("");
- $("debtList").innerHTML=rows.map(x=>`<div class="tx-item"><b>${safeText(x.name)}</b><div>Toplam: ${money(x.total_amount)} • Kalan: ${money(x.balance)}</div><small>Aylık: ${money(x.monthly_payment)} • Sonraki ödeme: ${safeText(x.next_due_date||"-")}</small><div class="tx-actions"><button class="btn soft" onclick="debtEdit('${x.id}')">Düzenle</button><button class="btn soft danger" onclick="debtArchive('${x.id}')">Pasife al</button></div></div>`).join("")||"Henüz borç eklenmedi.";
- $("debtPayments").innerHTML=(p.data||[]).map(x=>`<div class="tx-item">${safeText(x.debt_accounts?.name||"Borç")} • ${safeText(x.payment_date)} <b style="float:right">${money(x.amount)}</b></div>`).join("")||"Henüz ödeme yok.";
-}
-$("debtAdd").onclick=async()=>{
- const name=$("debtName").value.trim(),total=Number($("debtTotal").value);
- const balance=$("debtBalance").value===""?total:Number($("debtBalance").value);
- if(!name||total<0||balance<0||balance>total)return alert("Borç tutarlarını kontrol et.");
- const {error}=await sb.from("debt_accounts").insert({name,total_amount:total,balance,monthly_payment:Number($("debtMonthly").value)||0,next_due_date:$("debtDue").value||null,note:$("debtNote").value.trim()});
- if(error)return alert(error.message);
- await loadDebts();alert("Borç kaydedildi.");
-};
-window.debtEdit=async id=>{
- const {data:x,error}=await sb.from("debt_accounts").select("*").eq("id",id).single();
- if(error)return alert(error.message);
- const balance=prompt("Kalan borç",x.balance);if(balance===null)return;
- const monthly=prompt("Aylık taksit",x.monthly_payment);if(monthly===null)return;
- const {error:e}=await sb.from("debt_accounts").update({balance:Number(balance),monthly_payment:Number(monthly)}).eq("id",id);
- if(e)return alert(e.message);await loadDebts();
-};
-window.debtArchive=async id=>{
- if(!confirm("Borç kaydını pasife almak istiyor musun?"))return;
- const {error}=await sb.from("debt_accounts").update({active:false}).eq("id",id);
- if(error)return alert(error.message);await loadDebts();
-};
-$("debtPaySave").onclick=async()=>{
- const id=$("debtPayAccount").value,amount=Number($("debtPayAmount").value);
- if(!id||amount<=0)return alert("Borç ve ödeme tutarı gir.");
- const {data:x,error}=await sb.from("debt_accounts").select("balance").eq("id",id).single();
- if(error)return alert(error.message);
- if(amount>Number(x.balance))return alert("Ödeme kalan borçtan fazla olamaz.");
- const {error:e}=await sb.from("debt_payments").insert({debt_id:id,amount,payment_date:$("debtPayDate").value||today(),payment_method:$("debtPayMethod").value,note:$("debtPayNote").value});
- if(e)return alert(e.message);
- const {error:u}=await sb.from("debt_accounts").update({balance:Number(x.balance)-amount}).eq("id",id);
- if(u)return alert("Ödeme eklendi ancak borç bakiyesi güncellenemedi: "+u.message);
- await loadDebts();alert("Borç ödemesi kaydedildi.");
-};
-
-async function loadStaff(){
- const [a,p]=await Promise.all([
-  sb.from("staff").select("*").eq("active",true).order("name"),
-  sb.from("staff_payments").select("*,staff(name)").order("payment_date",{ascending:false}).limit(40)
- ]);
- if(a.error||p.error){$("staffList").textContent="Personel tablolarını kontrol et.";return}
- const rows=a.data||[];
- $("staffPayPerson").innerHTML=rows.map(x=>`<option value="${x.id}">${safeText(x.name)}</option>`).join("");
- $("staffList").innerHTML=rows.map(x=>`<div class="tx-item"><b>${safeText(x.name)}</b><div>Aylık maaş: ${money(x.monthly_salary)} • İşe giriş: ${safeText(x.start_date||"-")}</div><div class="tx-actions"><button class="btn soft" onclick="staffEdit('${x.id}')">Maaşı düzenle</button><button class="btn soft danger" onclick="staffArchive('${x.id}')">Pasife al</button></div></div>`).join("")||"Henüz personel eklenmedi.";
- $("staffPayments").innerHTML=(p.data||[]).map(x=>`<div class="tx-item">${safeText(x.staff?.name||"Personel")} • ${safeText(x.payment_type)} • ${safeText(x.payment_date)} <b style="float:right">${money(x.amount)}</b></div>`).join("")||"Henüz ödeme yok.";
-}
-$("staffAdd").onclick=async()=>{
- const name=$("staffName").value.trim(),salary=Number($("staffSalary").value);
- if(!name||salary<0)return alert("Personel adı ve maaşı gir.");
- const {error}=await sb.from("staff").insert({name,monthly_salary:salary,start_date:$("staffStart").value||null});
- if(error)return alert(error.message);await loadStaff();alert("Personel eklendi.");
-};
-window.staffEdit=async id=>{
- const {data:x,error}=await sb.from("staff").select("*").eq("id",id).single();
- if(error)return alert(error.message);
- const salary=prompt("Yeni maaş",x.monthly_salary);if(salary===null)return;
- if(Number(salary)<0)return alert("Maaş tutarını kontrol et.");
- const {error:e}=await sb.from("staff").update({monthly_salary:Number(salary)}).eq("id",id);
- if(e)return alert(e.message);await loadStaff();
-};
-window.staffArchive=async id=>{
- if(!confirm("Personeli pasife almak istiyor musun?"))return;
- const {error}=await sb.from("staff").update({active:false}).eq("id",id);
- if(error)return alert(error.message);await loadStaff();
-};
-$("staffPaySave").onclick=async()=>{
- const id=$("staffPayPerson").value,amount=Number($("staffPayAmount").value);
- if(!id||amount<=0)return alert("Personel ve ödeme tutarı gir.");
- const {error}=await sb.from("staff_payments").insert({staff_id:id,amount,payment_date:$("staffPayDate").value||today(),payment_type:$("staffPayType").value,payment_method:$("staffPayMethod").value});
- if(error)return alert(error.message);
- await loadStaff();alert("Personel ödemesi kaydedildi.");
-};
-
-async function loadProductProfit(){
- const from=$("prodFrom").value||today(),to=$("prodTo").value||today();
- const {data,error}=await sb.from("sales").select("sale_date,sale_items(product_name,quantity,unit_price,unit_cost)").gte("sale_date",from).lte("sale_date",to).is("deleted_at",null);
- if(error){$("prodProfitList").textContent=error.message;return}
- const map={};
- (data||[]).forEach(s=>(s.sale_items||[]).forEach(i=>{
-  const k=i.product_name||"Ürün";map[k]??={qty:0,revenue:0,cost:0};
-  map[k].qty+=Number(i.quantity)||0;
-  map[k].revenue+=(Number(i.quantity)||0)*(Number(i.unit_price)||0);
-  map[k].cost+=(Number(i.quantity)||0)*(Number(i.unit_cost)||0);
- }));
- $("prodProfitList").innerHTML=Object.entries(map).map(([k,v])=>`<div class="tx-item"><b>${safeText(k)}</b><div>${v.qty} adet • Ciro: ${money(v.revenue)} • Maliyet: ${money(v.cost)}</div><b>Ürün katkısı: ${money(v.revenue-v.cost)}</b></div>`).join("")||"Satış yok.";
-}
-$("prodRun").onclick=loadProductProfit;
-
-async function loadMonthly(){
- const month=$("monthPick").value||today().slice(0,7);
- const from=month+"-01";
- const to=new Date(Number(month.slice(0,4)),Number(month.slice(5,7)),0).toLocaleDateString("en-CA");
- const [s,e,d,sp]=await Promise.all([
-  sb.from("sales").select("*,sale_items(*)").gte("sale_date",from).lte("sale_date",to).is("deleted_at",null),
-  sb.from("expenses").select("*").gte("expense_date",from).lte("expense_date",to).is("deleted_at",null),
-  sb.from("debt_payments").select("amount").gte("payment_date",from).lte("payment_date",to),
-  sb.from("staff_payments").select("amount").gte("payment_date",from).lte("payment_date",to)
- ]);
- const err=[s,e,d,sp].find(x=>x.error);
- if(err){$("monthBreakdown").textContent=err.error.message;return}
- const sum=(a,f)=>a.reduce((n,x)=>n+f(x),0),sales=s.data||[],ex=e.data||[];
- const revenue=sum(sales,x=>Number(x.total)||0);
- const discount=sum(sales,x=>Number(x.discount_amount)||0);
- const fees=sum(sales,x=>(Number(x.commission)||0)+(Number(x.courier_cost)||0));
- const cogs=sum(sales,x=>sum(x.sale_items||[],i=>(Number(i.quantity)||0)*(Number(i.unit_cost)||0)));
- const expenses=sum(ex,x=>Number(x.amount)||0);
- const payroll=sum(sp.data||[],x=>Number(x.amount)||0);
- const debt=sum(d.data||[],x=>Number(x.amount)||0);
- const operating=revenue-fees-cogs-expenses;
- [["mRevenue",revenue],["mDiscount",discount],["mFees",fees],["mCogs",cogs],["mExpenses",expenses],["mPayroll",payroll],["mDebtPaid",debt],["mOperating",operating],["mCashAfterDebt",operating-payroll-debt]].forEach(([id,v])=>$(id).textContent=money(v));
- const days={};sales.forEach(x=>days[x.sale_date]=(days[x.sale_date]||0)+Number(x.total||0));
- $("monthBreakdown").innerHTML="<h3>Günlük ciro</h3>"+Object.entries(days).sort().map(([k,v])=>`<div class="tx-item">${k}<b style="float:right">${money(v)}</b></div>`).join("");
-}
-$("monthRun").onclick=loadMonthly;
-
-sb.auth.onAuthStateChange((_e,session)=>{
- if(!session){$("app").classList.add("hidden");$("tabs").classList.add("hidden");$("login").classList.remove("hidden")}
-});
-/* BOLMIX EK MODULLER */
-(function(){
-  const nav=document.getElementById("tabs");
-  const app=document.getElementById("app");
-  if(!nav||!app)return;
-
-  const modules=[
-    ["debts","Borçlar"],
-    ["staff","Personel"],
-    ["productsReport","Ürün Kârlılığı"],
-    ["monthly","Aylık Rapor"]
-  ];
-
-  const fmt=n=>(Number(n)||0).toLocaleString("tr-TR",{style:"currency",currency:"TRY"});
-  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const dateNow=()=>new Date().toLocaleDateString("en-CA");
-
-  modules.forEach(([id,label])=>{
-    if(!document.getElementById(id+"Tab")){
-      const b=document.createElement("button");
-      b.id=id+"Tab";
-      b.type="button";
-      b.textContent=label;
-      b.dataset.extraPage=id;
-      nav.appendChild(b);
-      b.addEventListener("click",()=>openExtra(id,b));
-    }
-    if(!document.getElementById(id)){
-      const page=document.createElement("div");
-      page.className="page";
-      page.id=id;
-      page.innerHTML=moduleMarkup(id);
-      app.appendChild(page);
-    }
-  });
-
-  function moduleMarkup(id){
-    if(id==="debts")return `
-      <div class="card">
-        <h2>Borç Ekle</h2>
-        <label>Borç adı / alacaklı</label><input id="dName">
-        <label>Toplam borç</label><input id="dTotal" type="number">
-        <label>Kalan borç</label><input id="dBalance" type="number">
-        <label>Aylık ödeme</label><input id="dMonthly" type="number">
-        <label>Sonraki vade</label><input id="dDue" type="date">
-        <button class="btn" id="dAdd">Borcu kaydet</button>
-      </div>
-      <div class="card"><h2>Borçlarım</h2><div id="dList"></div></div>
-      <div class="card">
-        <h2>Borç ödemesi</h2>
-        <label>Borç</label><select id="dSelect"></select>
-        <label>Ödeme tutarı</label><input id="dPay" type="number">
-        <label>Ödeme tarihi</label><input id="dDate" type="date">
-        <label>Ödeme yöntemi</label>
-        <select id="dMethod"><option>Nakit</option><option>Kredi kartı</option><option>IBAN</option><option>Havale / EFT</option></select>
-        <button class="btn" id="dPaySave">Ödemeyi kaydet</button>
-      </div>
-      <div class="card"><h2>Son ödemeler</h2><div id="dPayments"></div></div>`;
-
-    if(id==="staff")return `
-      <div class="card">
-        <h2>Personel ekle</h2>
-        <label>Ad soyad</label><input id="sName">
-        <label>Aylık maaş</label><input id="sSalary" type="number">
-        <label>İşe giriş tarihi</label><input id="sStart" type="date">
-        <button class="btn" id="sAdd">Personeli kaydet</button>
-      </div>
-      <div class="card"><h2>Personel listesi</h2><div id="sList"></div></div>
-      <div class="card">
-        <h2>Maaş / avans ödemesi</h2>
-        <label>Personel</label><select id="sSelect"></select>
-        <label>Tutar</label><input id="sPay" type="number">
-        <label>Tarih</label><input id="sDate" type="date">
-        <label>Ödeme türü</label><select id="sType"><option>Maaş</option><option>Avans</option><option>Prim</option><option>Diğer</option></select>
-        <label>Ödeme yöntemi</label><select id="sMethod"><option>Nakit</option><option>Kredi kartı</option><option>IBAN</option><option>Havale / EFT</option></select>
-        <button class="btn" id="sPaySave">Ödemeyi kaydet</button>
-      </div>
-      <div class="card"><h2>Ödeme geçmişi</h2><div id="sPayments"></div></div>`;
-
-    if(id==="productsReport")return `
-      <div class="card"><h2>Ürün bazında kârlılık</h2>
-      <label>Başlangıç</label><input id="pFrom" type="date">
-      <label>Bitiş</label><input id="pTo" type="date">
-      <button class="btn" id="pRun">Raporu getir</button>
-      <div id="pResults"></div></div>`;
-
-    return `<div class="card"><h2>Aylık işletme raporu</h2>
-      <label>Ay</label><input id="mMonth" type="month">
-      <button class="btn" id="mRun">Raporu getir</button>
-      <div id="mResults"></div></div>`;
-  }
-
-  function openExtra(id,b){
-    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    document.getElementById(id).classList.add("active");
-    if(id==="debts")loadDebtsExtra();
-    if(id==="staff")loadStaffExtra();
-    if(id==="productsReport")loadProductsExtra();
-    if(id==="monthly")loadMonthlyExtra();
-  }
-
-  async function loadDebtsExtra(){
-    const {data,error}=await sb.from("debt_accounts").select("*").eq("active",true).order("created_at");
-    if(error){$("dList").textContent=error.message;return;}
-    const rows=data||[];
-    $("dSelect").innerHTML=rows.map(x=>`<option value="${x.id}">${esc(x.name)} — kalan ${fmt(x.balance)}</option>`).join("");
-    $("dList").innerHTML=rows.map(x=>`<div class="tx-item"><b>${esc(x.name)}</b><div>Toplam ${fmt(x.total_amount)} • Kalan ${fmt(x.balance)}</div><small>Aylık ${fmt(x.monthly_payment)} • Vade ${esc(x.next_due_date||"-")}</small></div>`).join("")||"Henüz borç yok.";
-    const {data:p,error:e}=await sb.from("debt_payments").select("*,debt_accounts(name)").order("payment_date",{ascending:false}).limit(50);
-    $("dPayments").textContent=e?e.message:(p||[]).map(x=>`${x.debt_accounts?.name||"Borç"} • ${x.payment_date} • ${fmt(x.amount)}`).join("\n")||"Ödeme yok.";
-  }
-
-  $("dAdd").onclick=async()=>{
-    const name=$("dName").value.trim(),total=Number($("dTotal").value),balance=$("dBalance").value===""?total:Number($("dBalance").value);
-    if(!name||total<0||balance<0||balance>total)return alert("Borç bilgilerini kontrol et.");
-    const {error}=await sb.from("debt_accounts").insert({name,total_amount:total,balance,monthly_payment:Number($("dMonthly").value)||0,next_due_date:$("dDue").value||null,active:true});
-    if(error)return alert(error.message);
-    alert("Borç kaydedildi.");loadDebtsExtra();
-  };
-
-  $("dPaySave").onclick=async()=>{
-    const id=$("dSelect").value,amount=Number($("dPay").value);
-    if(!id||amount<=0)return alert("Borç ve ödeme tutarı gir.");
-    const {data:x,error}=await sb.from("debt_accounts").select("balance").eq("id",id).single();
-    if(error)return alert(error.message);
-    if(amount>Number(x.balance))return alert("Ödeme kalan borçtan fazla.");
-    const {error:e}=await sb.from("debt_payments").insert({debt_id:id,amount,payment_date:$("dDate").value||dateNow(),payment_method:$("dMethod").value});
-    if(e)return alert(e.message);
-    const {error:u}=await sb.from("debt_accounts").update({balance:Number(x.balance)-amount}).eq("id",id);
-    if(u)return alert(u.message);
-    alert("Ödeme kaydedildi.");loadDebtsExtra();
-  };
-
-  async function loadStaffExtra(){
-    const {data,error}=await sb.from("staff").select("*").eq("active",true).order("name");
-    if(error){$("sList").textContent=error.message;return;}
-    const rows=data||[];
-    $("sSelect").innerHTML=rows.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-    $("sList").innerHTML=rows.map(x=>`<div class="tx-item"><b>${esc(x.name)}</b><div>Aylık maaş: ${fmt(x.monthly_salary)} • Başlangıç: ${esc(x.start_date||"-")}</div></div>`).join("")||"Personel yok.";
-    const {data:p,error:e}=await sb.from("staff_payments").select("*,staff(name)").order("payment_date",{ascending:false}).limit(50);
-    $("sPayments").textContent=e?e.message:(p||[]).map(x=>`${x.staff?.name||"Personel"} • ${x.payment_type} • ${x.payment_date} • ${fmt(x.amount)}`).join("\n")||"Ödeme yok.";
-  }
-
-  $("sAdd").onclick=async()=>{
-    const name=$("sName").value.trim(),salary=Number($("sSalary").value);
-    if(!name||salary<0)return alert("Personel bilgilerini kontrol et.");
-    const {error}=await sb.from("staff").insert({name,monthly_salary:salary,start_date:$("sStart").value||null,active:true});
-    if(error)return alert(error.message);
-    alert("Personel eklendi.");loadStaffExtra();
-  };
-
-  $("sPaySave").onclick=async()=>{
-    const id=$("sSelect").value,amount=Number($("sPay").value);
-    if(!id||amount<=0)return alert("Personel ve ödeme tutarı gir.");
-    const {error}=await sb.from("staff_payments").insert({staff_id:id,amount,payment_date:$("sDate").value||dateNow(),payment_type:$("sType").value,payment_method:$("sMethod").value});
-    if(error)return alert(error.message);
-    alert("Ödeme kaydedildi.");loadStaffExtra();
-  };
-
-  async function loadProductsExtra(){
-    const from=$("pFrom").value||dateNow(),to=$("pTo").value||dateNow();
-    const {data,error}=await sb.from("sales").select("sale_items(product_name,quantity,unit_price,unit_cost)").gte("sale_date",from).lte("sale_date",to).is("deleted_at",null);
-    if(error){$("pResults").textContent=error.message;return;}
-    const map={};
-    (data||[]).forEach(s=>(s.sale_items||[]).forEach(i=>{
-      const k=i.product_name||"Ürün";map[k]??={q:0,r:0,c:0};
-      map[k].q+=Number(i.quantity)||0;
-      map[k].r+=(Number(i.quantity)||0)*(Number(i.unit_price)||0);
-      map[k].c+=(Number(i.quantity)||0)*(Number(i.unit_cost)||0);
-    }));
-    $("pResults").innerHTML=Object.entries(map).map(([k,v])=>`<div class="tx-item"><b>${esc(k)}</b><div>${v.q} adet • Ciro ${fmt(v.r)} • Maliyet ${fmt(v.c)}</div><b>Ürün katkısı: ${fmt(v.r-v.c)}</b></div>`).join("")||"Satış yok.";
-  }
-  $("pRun").onclick=loadProductsExtra;
-
-  async function loadMonthlyExtra(){
-    const month=$("mMonth").value||dateNow().slice(0,7),from=month+"-01";
-    const to=new Date(Number(month.slice(0,4)),Number(month.slice(5,7)),0).toLocaleDateString("en-CA");
-    const [s,e,d,p]=await Promise.all([
-      sb.from("sales").select("*,sale_items(*)").gte("sale_date",from).lte("sale_date",to).is("deleted_at",null),
-      sb.from("expenses").select("*").gte("expense_date",from).lte("expense_date",to).is("deleted_at",null),
-      sb.from("debt_payments").select("amount").gte("payment_date",from).lte("payment_date",to),
-      sb.from("staff_payments").select("amount").gte("payment_date",from).lte("payment_date",to)
-    ]);
-    const err=[s,e,d,p].find(x=>x.error);
-    if(err){$("mResults").textContent=err.error.message;return;}
-    const sum=(a,f)=>a.reduce((n,x)=>n+f(x),0),sales=s.data||[];
-    const revenue=sum(sales,x=>Number(x.total)||0);
-    const fees=sum(sales,x=>(Number(x.commission)||0)+(Number(x.courier_cost)||0));
-    const cogs=sum(sales,x=>sum(x.sale_items||[],i=>(Number(i.quantity)||0)*(Number(i.unit_cost)||0)));
-    const expenses=sum(e.data||[],x=>Number(x.amount)||0);
-    const payroll=sum(p.data||[],x=>Number(x.amount)||0);
-    const debt=sum(d.data||[],x=>Number(x.amount)||0);
-    const operating=revenue-fees-cogs-expenses;
-    $("mResults").innerHTML=[
-      ["Toplam ciro",revenue],["Komisyon + kurye",fees],
-      ["Ürün maliyeti",cogs],["Gider kayıtları",expenses],
-      ["Personel ödemeleri",payroll],["Borç ödemeleri",debt],
-      ["Tahmini faaliyet sonucu",operating],
-      ["Personel ve borç ödemeleri sonrası",operating-payroll-debt]
-    ].map(([k,v])=>`<div class="tx-item">${k}<b style="float:right">${fmt(v)}</b></div>`).join("");
-  }
-  $("mRun").onclick=loadMonthlyExtra;
-})();
-
+function safeText(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\'":"&#39;"}[c]))}
+sb.auth.onAuthStateChange((_e,session)=>{if(!session){$("app").classList.add("hidden");$("tabs").classList.add("hidden");$("login").classList.remove("hidden")}});
 sessionCheck();
- </script>
-</body>
-</html>
+</script></body></html>
